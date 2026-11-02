@@ -1,0 +1,7 @@
+.DS_Store
+STATUS.md
+.env*
+*.tar
+*.tar.gz
+node_modules/
+supabase/admin-update.sql

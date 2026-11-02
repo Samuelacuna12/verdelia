@@ -1,0 +1,41 @@
+begin;
+-- Temporary isolation; ROLLBACK restores all original rows and sequence state.
+truncate verdelia_private.account, verdelia_private.sessions, verdelia_private.products, verdelia_private.recipes, verdelia_private.sales, verdelia_private.orders, verdelia_private.stock_moves, verdelia_private.purchases, verdelia_private.lots, verdelia_private.cash_moves, verdelia_private.closings, verdelia_private.audit, verdelia_private.requests restart identity;
+do $$
+declare token text:=encode(extensions.gen_random_bytes(32),'hex'); aid uuid; p jsonb;c jsonb;s jsonb; again jsonb;o jsonb;snapshot jsonb; request jsonb; pid uuid;cid uuid;blocked boolean:=false;
+begin
+ insert into verdelia_private.account(email) values('verdelia-test@example.invalid') returning id into aid;
+ insert into verdelia_private.sessions(token_hash,account_id) values(encode(extensions.digest(token,'sha256'),'hex'),aid);
+ begin perform public.verdelia_admin('snapshot','{}');exception when insufficient_privilege then blocked:=true;end;
+ assert blocked,'Unauthenticated admin access was not blocked';
+ p:=public.verdelia_admin('save_product',jsonb_build_object('session',token,'request_id',gen_random_uuid(),'name','Test banano','price',5000,'cost',3000,'opening_stock',10,'minimum',2,'target',20,'unit','kg','published',true));pid:=(p->>'id')::uuid;
+ c:=public.verdelia_admin('save_product',jsonb_build_object('session',token,'request_id',gen_random_uuid(),'name','Test combo','kind','combo','price',12000,'cost',1000,'published',true,'recipe',jsonb_build_array(jsonb_build_object('id',pid,'quantity',2))));cid:=(c->>'id')::uuid;
+ request:=jsonb_build_object('session',token,'request_id',gen_random_uuid(),'lines',jsonb_build_array(jsonb_build_object('id',pid,'quantity',4,'unit','lb')),'method','efectivo','cash_received',20000);
+ s:=public.verdelia_admin('sale',request);
+ assert (s->>'total')::numeric=10000,'Mass conversion failed';assert (s->>'cost')::numeric=6000,'Snapshot cost wrong';
+ assert (select stock from verdelia_private.products where id=pid)=8,'Sale stock not deducted';
+ again:=public.verdelia_admin('sale',request);assert again->>'id'=s->>'id','Idempotency failed';assert (select stock from verdelia_private.products where id=pid)=8,'Idempotent sale deducted twice';
+ blocked:=false;begin perform public.verdelia_admin('sale',jsonb_build_object('session',token,'request_id',gen_random_uuid(),'lines',jsonb_build_array(jsonb_build_object('id',pid,'quantity',100,'unit','kg')),'method','efectivo'));exception when others then blocked:=true;end;assert blocked,'Overselling was allowed';
+ assert (select count(*) from verdelia_private.sales)=1,'Failed sale persisted';
+ o:=public.verdelia_order(jsonb_build_object('request_id',gen_random_uuid(),'customer','Prueba','phone','3000000000','delivery_type','pickup','lines',jsonb_build_array(jsonb_build_object('id',cid,'quantity',1,'unit','und'))));
+ assert not (o->'quote' ? 'cost'),'Public order exposes cost';assert not (o->'quote'->'lines'->0 ? 'cost'),'Public line exposes cost';assert not (o->'quote'->'lines'->0 ? 'ingredients'),'Public order exposes recipe';
+ assert (select reserved from verdelia_private.products where id=pid)=0,'Pending order reserves inventory';
+ perform public.verdelia_admin('confirm_order',jsonb_build_object('session',token,'request_id',gen_random_uuid(),'id',o->>'id'));
+ assert (select reserved from verdelia_private.products where id=pid)=2,'Confirmation did not reserve';
+ perform public.verdelia_admin('complete_order',jsonb_build_object('session',token,'request_id',gen_random_uuid(),'id',o->>'id','method','transferencia'));
+ assert (select stock from verdelia_private.products where id=pid)=6,'Combo ingredients not consumed';assert (select reserved from verdelia_private.products where id=pid)=0,'Reservation not released';
+ perform public.verdelia_admin('refund',jsonb_build_object('session',token,'request_id',gen_random_uuid(),'id',s->>'id','restock',true,'note','Devolución de prueba'));
+ assert (select stock from verdelia_private.products where id=pid)=8,'Refund stock wrong';
+ assert (select sum(total) from verdelia_private.sales)=12000,'Revenue refund wrong';assert (select sum(cost) from verdelia_private.sales)=7000,'COGS refund wrong';
+ perform public.verdelia_admin('receive',jsonb_build_object('session',token,'request_id',gen_random_uuid(),'supplier','Prueba','method','efectivo','lines',jsonb_build_array(jsonb_build_object('id',pid,'quantity',2,'unit_cost',4000,'expiry','2026-11-10'))));
+ assert (select stock from verdelia_private.products where id=pid)=10,'Purchase stock wrong';assert (select avg_cost from verdelia_private.products where id=pid)=3200,'Weighted cost wrong';
+ perform public.verdelia_admin('adjust_stock',jsonb_build_object('session',token,'request_id',gen_random_uuid(),'id',pid,'quantity',-1,'reason','loss','note','Producto dañado'));
+ perform public.verdelia_admin('cash',jsonb_build_object('session',token,'request_id',gen_random_uuid(),'kind','deposit','amount',100000,'method','efectivo','note','Base de caja'));
+ perform public.verdelia_admin('cash',jsonb_build_object('session',token,'request_id',gen_random_uuid(),'kind','expense','amount',5000,'method','efectivo','note','Transporte'));
+ perform public.verdelia_admin('close_cash',jsonb_build_object('session',token,'request_id',gen_random_uuid(),'counted',87000));
+ snapshot:=public.verdelia_admin('snapshot',jsonb_build_object('session',token));
+ assert jsonb_array_length(snapshot->'sales')=3,'Report sale rows missing';
+ assert not exists(select 1 from verdelia_private.requests where payload ? 'session'),'Session leaked into request history';
+end $$;
+select 'PASS: authentication, units, weighted cost, sales, combos, reservations, refunds, cash, idempotency, public privacy' result;
+rollback;
