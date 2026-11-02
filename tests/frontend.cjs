@@ -5,7 +5,7 @@ const source = fs.readFileSync(__dirname + '/../dist/app.js', 'utf8').split("win
 const context = vm.createContext({
   window: {VERDELIA_CONFIG: {}, addEventListener() {}},
   localStorage: {getItem() {return ''}},
-  document: {addEventListener() {}}, Intl, Date, console, setTimeout, clearTimeout,
+  document: {addEventListener() {}}, Intl, Date, console, setTimeout, clearTimeout, setInterval() {},
 });
 vm.runInContext(source, context);
 const run = code => vm.runInContext(code, context);
@@ -22,3 +22,6 @@ assert.equal(run("csvCell('=SUM(A1)')"), '"\'=SUM(A1)"');
 assert.equal(run("esc('<script>')"), '&lt;script&gt;');
 assert.equal(run("groupDays([{created_at:'2026-11-02T02:00:00Z',total:3000},{created_at:'2026-11-01T18:00:00Z',total:-1000}])['2026-11-01']"), 2000);
 console.log('PASS: Colombia dates, kg/lb/g, profit/refunds/losses, grouping, escaping and CSV');
+
+assert.equal(run("unitNames.kg"),'Kilos disponibles');
+assert.equal(run("priceMeasures('kg')[1][0]"),'lb');

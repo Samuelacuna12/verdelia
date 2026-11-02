@@ -22,7 +22,7 @@ vm.runInNewContext(fs.readFileSync(path.join(root, 'sw.js'), 'utf8'), {
     clients: {claim() {}},
   },
   caches: {
-    async keys() {return [currentPrefix + 'v1', currentPrefix + 'v2', 'invicto-assets-v1', 'verdelia-shell-/otra-app/-v1'];},
+    async keys() {return [currentPrefix + 'v1', currentPrefix + 'v3', 'invicto-assets-v1', 'verdelia-shell-/otra-app/-v1'];},
     async delete(key) {removed.push(key);},
   },
 });
