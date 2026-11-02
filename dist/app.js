@@ -10,7 +10,7 @@ const dateKey=(v=new Date())=>new Intl.DateTimeFormat('en-CA',{timeZone:TZ,year:
 const dateLabel=v=>new Intl.DateTimeFormat('es-CO',{timeZone:TZ,day:'2-digit',month:'short',year:'numeric'}).format(new Date(v));
 const timeLabel=v=>new Intl.DateTimeFormat('es-CO',{timeZone:TZ,hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false}).format(new Date(v));
 const dateAt=d=>new Date(d+'T12:00:00-05:00');
-const categories=['Frutas','Verduras','Minimarket','Lácteos','Limpieza','Golosinas','Panadería','Arepas y empanadas','Jugos','Salpicón y ensaladas de frutas','Bebidas','Abarrotes','Congelados','Combos','Otros'];
+const categories=['Frutas','Verduras','Minimarket','Lácteos','Alimento para mascotas','Limpieza','Golosinas','Panadería','Arepas y empanadas','Jugos','Salpicón y ensaladas de frutas','Bebidas','Abarrotes','Congelados','Combos','Otros'];
 const methods={efectivo:'Efectivo',transferencia:'Transferencia',tarjeta:'Tarjeta'};
 const orderLabels={pending:'Pendiente',confirmed:'Confirmado',completed:'Entregado',cancelled:'Cancelado'};
 let session=localStorage.getItem('verdelia.session')||'',state={products:[],sales:[],orders:[],cash:[],stock_moves:[],lots:[],purchases:[],closings:[],audit:[],balances:{},settings:{name:'Verdélia',whatsapp:'573115565525',pound_grams:500},preferences:{}},catalog={products:[],settings:{}},page='resumen',from=dateKey(),to=dateKey(),calendarMonth=dateKey().slice(0,7),query='',category='Todas',onlyLow=false,saleChannel='Todos',saleMethod='Todos',salesPage=0,orderFilter='Todos',storeCategory='Todos',storeQuery='',cart=[],lastFocus,loading=false,formLines=[],draftSaleId='',requestInFlight=false,activationToken='',reportCache={};

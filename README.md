@@ -16,7 +16,7 @@ Aplicación de ventas, inventario y control financiero interno para fruver y min
 5. Los clientes crean pedidos desde el Link de venta y pueden enviar el resumen por WhatsApp. Un pedido pendiente no está pagado ni reserva mercancía. Confirmarlo reserva ingredientes; cobrar y entregar registra la venta y descuenta el inventario.
 6. Usa Caja para gastos, aportes, retiros y cierre. Calendario permite abrir un día y consultar ventas, gastos, ganancias, movimientos de dinero e inventario, con sus horas.
 
-El selector muestra frutas, verduras, minimarket, lácteos, limpieza, golosinas, panadería, arepas y empanadas, jugos, salpicón, bebidas, abarrotes, congelados y otras. Crear otra categoría permite añadir una propia. El catálogo muestra también categorías sin productos publicados y explica su estado vacío. Una libra equivale inicialmente a 500 gramos; es configurable.
+El selector muestra frutas, verduras, minimarket, lácteos, alimento para mascotas, limpieza, golosinas, panadería, arepas y empanadas, jugos, salpicón, bebidas, abarrotes, congelados y otras. Crear otra categoría permite añadir una propia. El catálogo muestra también categorías sin productos publicados y explica su estado vacío. Una libra equivale inicialmente a 500 gramos; es configurable.
 
 ## Incluido
 
