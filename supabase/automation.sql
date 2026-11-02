@@ -71,7 +71,9 @@ create or replace function verdelia_private.order_notification() returns trigger
 begin
  if (select pending_orders from verdelia_private.alert_preferences) then
   perform verdelia_private.enqueue_push('order','Nuevo pedido P-'||new.number,'Abre Verdélia para revisar y confirmar el pedido.','pedidos','order:'||new.id);
-  if exists(select 1 from verdelia_private.push_subscriptions where active) then perform verdelia_private.wake_worker();end if;
+  if exists(select 1 from verdelia_private.push_subscriptions where active) then
+   begin perform verdelia_private.wake_worker();exception when others then null;end; -- The committed outbox is retried by Cron; notification transport must not reject an order.
+  end if;
  end if;
  return new;
 end $$;

@@ -25,3 +25,14 @@ console.log('PASS: Colombia dates, kg/lb/g, profit/refunds/losses, grouping, esc
 
 assert.equal(run("unitNames.kg"),'Kilos disponibles');
 assert.equal(run("priceMeasures('kg')[1][0]"),'lb');
+
+assert.equal(run("suggestedSalePrice(3000,'lb','lb','kg',30)"),3900);
+assert.equal(run("suggestedSalePrice(3000,'lb','lb','kg',40)"),4200);
+assert.equal(run("suggestedSalePrice(3000,'lb','lb','kg',50)"),4500);
+assert.equal(run("suggestedSalePrice(3000,'lb','kg','kg',30)"),7800);
+assert.equal(run("suggestedSalePrice(5000,'kg','lb','kg',35)"),3375);
+assert.equal(run("suggestedSalePrice(1200,'und','und','und',50)"),1800);
+console.log('PASS: suggested prices use markup on cost, custom percentages, and selected measures');
+
+for(const category of ['Frutas','Verduras','Minimarket','Lácteos','Limpieza','Golosinas','Arepas y empanadas','Jugos','Congelados'])assert.equal(run('categories.includes('+JSON.stringify(category)+')'),true);
+console.log('PASS: all agreed product categories are available');

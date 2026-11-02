@@ -10,13 +10,13 @@ Aplicación de ventas, inventario y control financiero interno para fruver y min
 ## Uso
 
 1. Activa tu cuenta con el enlace privado entregado al administrador. Usuario: `verdelia`. Define una contraseña y guarda el código de recuperación.
-2. En Inventario crea tus productos, categoría, Precio costo, Precio venta, Kilos disponibles (u otra medida) y nivel mínimo. Puedes ingresar costo y venta por kilo, libra o gramo; el servidor los convierte. Editar permite corregir costos y cantidades con motivo e historial, sin reescribir ventas anteriores. Las compras posteriores actualizan el costo promedio. La medida base se puede corregir antes de tener operaciones o recetas; después se conserva para proteger los movimientos históricos.
+2. En Inventario crea tus productos, categoría, Precio costo, Precio venta, Kilos disponibles (u otra medida) y nivel mínimo. Precio venta sugerido ofrece aumentos de 30%, 40%, 50% o un porcentaje personalizado sobre el costo, siempre con edición manual. Puedes ingresar costo y venta por kilo, libra o gramo; el servidor los convierte. Editar permite corregir costos y cantidades con motivo e historial, sin reescribir ventas anteriores. Las compras posteriores actualizan el costo promedio. La medida base se puede corregir antes de tener operaciones o recetas; después se conserva para proteger los movimientos históricos.
 3. En Combos crea recetas con ingredientes del inventario: combos de frutas, jugos, salpicón, empanadas u otras preparaciones.
 4. Registra ventas cobradas. Cada operación guarda su precio y costo históricos, descuenta existencias y registra el dinero recibido.
 5. Los clientes crean pedidos desde el Link de venta y pueden enviar el resumen por WhatsApp. Un pedido pendiente no está pagado ni reserva mercancía. Confirmarlo reserva ingredientes; cobrar y entregar registra la venta y descuenta el inventario.
 6. Usa Caja para gastos, aportes, retiros y cierre. Calendario permite abrir un día y consultar ventas, gastos, ganancias, movimientos de dinero e inventario, con sus horas.
 
-Las categorías incluyen frutas, verduras, lácteos, limpieza, golosinas, panadería, arepas y empanadas, jugos, salpicón, bebidas, abarrotes y otras. Se pueden escribir categorías adicionales. Una libra equivale inicialmente a 500 gramos; es configurable.
+El selector muestra frutas, verduras, minimarket, lácteos, limpieza, golosinas, panadería, arepas y empanadas, jugos, salpicón, bebidas, abarrotes, congelados y otras. Crear otra categoría permite añadir una propia. El catálogo muestra también categorías sin productos publicados y explica su estado vacío. Una libra equivale inicialmente a 500 gramos; es configurable.
 
 ## Incluido
 

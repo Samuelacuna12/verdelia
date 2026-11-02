@@ -1,6 +1,6 @@
 begin;
 -- Temporary isolation; ROLLBACK restores all original rows and sequence state.
-truncate verdelia_private.account, verdelia_private.sessions, verdelia_private.products, verdelia_private.recipes, verdelia_private.sales, verdelia_private.orders, verdelia_private.stock_moves, verdelia_private.purchases, verdelia_private.lots, verdelia_private.cash_moves, verdelia_private.closings, verdelia_private.audit, verdelia_private.requests restart identity;
+truncate verdelia_private.push_deliveries, verdelia_private.push_events, verdelia_private.push_subscriptions, verdelia_private.stock_alert_state, verdelia_private.account, verdelia_private.sessions, verdelia_private.products, verdelia_private.recipes, verdelia_private.sales, verdelia_private.orders, verdelia_private.stock_moves, verdelia_private.purchases, verdelia_private.lots, verdelia_private.cash_moves, verdelia_private.closings, verdelia_private.audit, verdelia_private.requests restart identity;
 do $$
 declare token text:=encode(extensions.gen_random_bytes(32),'hex'); aid uuid; p jsonb;c jsonb;s jsonb; again jsonb;o jsonb;snapshot jsonb; request jsonb; pid uuid;cid uuid;blocked boolean:=false;
 begin

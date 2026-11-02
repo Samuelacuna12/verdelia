@@ -7,3 +7,14 @@
 @media(max-width:780px){.calendar-grid,.calendar-head{min-width:0}.calendar-scroll{overflow:visible}.calendar-head span{font-size:0}.calendar-head span:after{content:attr(data-short);font-size:11px}.cal-day,.cal-blank{min-height:68px;padding:6px;align-items:center}.cal-value,.cal-day>.small{display:none}.cal-day.has-data:after{top:auto;right:calc(50% - 2px);bottom:12px;width:5px;height:5px}.calendar-legend{gap:8px}.cal-date{margin:0;font-size:12px}}
 
 .calendar-title:first-letter{text-transform:uppercase}@media(max-width:480px){.calendar-title{font-size:17px}}
+
+.price-suggestions{min-width:0;margin:12px 0 20px;padding:14px;border:1px solid var(--line,#dfe3db);border-radius:12px;background:#fff}
+.price-suggestions legend{font-size:12px;font-weight:600;padding:0 6px}
+.suggestion-options{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 12px}
+.suggestion-options .btn{flex:1;min-width:85px;display:flex;flex-direction:column;gap:3px;padding:9px 10px;font-size:12px;line-height:1.4}
+.suggestion-options .btn strong{font-size:13px;font-variant-numeric:tabular-nums}
+.custom-markup{display:flex;align-items:end;gap:10px;margin-bottom:10px}
+.custom-markup .field{flex:1;min-width:0;margin:0}
+.custom-markup .btn{margin-bottom:0;white-space:nowrap}
+
+#custom-category-field[hidden]{display:none}
