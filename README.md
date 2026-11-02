@@ -2,8 +2,9 @@
 
 Aplicación de ventas, inventario y control financiero interno para fruver y minimarket. Interfaz en español, pesos colombianos y fechas de Colombia. Funciona en PC y como web/app instalada en iPhone.
 
-- Panel: https://verdelia-gestion.universoinvicto.chatgpt.site/#resumen
-- Catálogo para clientes: https://verdelia-gestion.universoinvicto.chatgpt.site/#tienda
+- Destino preparado para GitHub Pages: https://samuelacuna12.github.io/verdelia/#resumen
+- Catálogo previsto: https://samuelacuna12.github.io/verdelia/#tienda
+- Estado de la migración: archivos preparados; falta habilitar Pages. La publicación actual permanece disponible hasta comprobar la nueva dirección.
 - Código privado: https://github.com/Samuelacuna12/verdelia
 
 ## Uso
@@ -41,12 +42,13 @@ La base de datos está en `invicto-ops`, exclusivamente en `verdelia_private`, c
 
 El navegador contiene únicamente la clave publicable de Supabase. No incluir claves de servicio, tokens de sesión, códigos de recuperación ni enlaces de activación en el repositorio. El acceso del administrador se guarda en el navegador por siete días o hasta cerrar sesión. El service worker almacena solo los archivos de la interfaz, nunca respuestas financieras.
 
-Para abrir localmente: `python3 -m http.server 8766 --directory dist`. El sitio se publica con Sites usando `.openai/hosting.json`. GitHub conserva el código privado; no se usa GitHub Pages porque el plan actual no permite Pages para este repositorio privado.
+Para abrir localmente: `python3 -m http.server 8766 --directory dist`. GitHub Pages publica únicamente el contenido de `dist/`, copiado a la raíz de la rama `gh-pages`, con el archivo `.nojekyll`. En Settings → Pages se selecciona `gh-pages` y `/ (root)`. Las rutas, íconos y accesos rápidos son relativos a `/verdelia/`. La configuración previa de Sites se conserva como referencia durante la migración. No se publican tablas ni datos de Supabase en la web. Con GitHub Free, habilitar Pages requiere un repositorio público; los permisos de acceso a la base de datos siguen siendo independientes. Al actualizar la aplicación, sincronizar la rama `gh-pages` con `dist/` después de ejecutar las verificaciones.
 
 ## Verificación
 
 - `node --check dist/app.js`
 - `node tests/frontend.cjs`
+- `node tests/hosting.cjs`
 - `tests/database.sql` y `tests/auth.sql`: pruebas transaccionales con rollback. Ejecutarlas en una copia de pruebas; el script financiero aísla temporalmente las tablas de Verdélia mientras dura la transacción.
 - Revisión visual en PC y ancho de iPhone: producto, venta por libras, gasto, calendario diario, catálogo y pedido.
 
